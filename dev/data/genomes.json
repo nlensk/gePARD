@@ -1,0 +1,83 @@
+[
+{
+  "accession": "NC_091964.1",
+
+  "name": "Serratia phage PCH45",
+
+  "host": "Prodigiosinella confusarubida",
+
+  "hostGenus": "Prodigiosinella",
+
+  "taxonomy": "Caudoviricetes",
+
+  "metadata":
+  {
+      "length":212807,
+      "gc":41,
+      "geneCount":195
+  },
+
+  "analysis":
+  {
+      "proteinHits":0,
+      "nucleotideHits":0,
+      "highConfidenceProteinHits":0,
+      "highConfidenceNucleotideHits":0
+  }
+},
+
+{
+  "accession": "NC_042128.1",
+
+  "name": "Escherichia phage RCS47",
+
+  "host": "Escherichia coli",
+
+  "hostGenus": "Escherichia",
+
+  "taxonomy": "Caudoviricetes",
+
+  "metadata":
+  {
+      "length":115154,
+      "gc":53,
+      "geneCount":110
+  },
+
+  "analysis":
+  {
+      "proteinHits":500,
+      "nucleotideHits":310,
+      "highConfidenceProteinHits":0,
+      "highConfidenceNucleotideHits":0
+  }
+},
+
+{
+  "accession": "NC_041881.1",
+
+  "name": "Pseudomonas phage pf16",
+
+  "host": "Pseudomonas putida",
+
+  "hostGenus": "Pseudomonas",
+
+  "taxonomy": "Caudoviricetes",
+
+  "metadata":
+  {
+      "length":158136,
+      "gc":58,
+      "geneCount":147
+  },
+
+  "analysis":
+  {
+      "proteinHits":0,
+      "nucleotideHits":1,
+      "highConfidenceProteinHits":0,
+      "highConfidenceNucleotideHits":0
+  }
+}
+]
+
