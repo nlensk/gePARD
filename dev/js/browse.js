@@ -42,10 +42,10 @@ function displayGenomes(genomes) {
 
 }
 
-function updateGenomeCount(genomes) {
+function updateGenomeCount(stats) {
 
     document.getElementById("genomeCount").textContent =
-        `${genomes.length} genomes loaded`;
+        `${stats.totalGenomes} genomes loaded`;
 
 }
 
@@ -55,7 +55,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const genomes = database.getAllGenomes();
 
-    updateGenomeCount(genomes);
+    const stats = database.getStatistics();
+
+    console.log(stats);
+
+    updateGenomeCount(stats);
 
     displayGenomes(genomes);
 

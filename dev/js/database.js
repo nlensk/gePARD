@@ -4,6 +4,7 @@ class Database {
 
         this.genomes = [];
         this.loaded = false;
+        this.statistics = null;
 
     }
 
@@ -69,6 +70,30 @@ class Database {
         return this.genomes.find(
             genome => genome.accession === accession
         );
+
+    }
+
+    getStatistics() {
+
+        let proteinCandidates = 0;
+
+        for (const genome of this.genomes) {
+
+            if (genome.analysis.proteinHits > 0) {
+
+                proteinCandidates++;
+
+            }
+
+        }
+
+        return {
+
+            totalGenomes: this.genomes.length,
+
+            proteinCandidates: proteinCandidates
+
+        };
 
     }
 
