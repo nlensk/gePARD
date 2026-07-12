@@ -4,3 +4,11 @@ document.getElementById("browseButton")
 window.location.href="pages/browse.html";
 
 });
+
+window.addEventListener("load", async () => {
+
+    await database.load();
+
+    console.log(database.getAllGenomes());
+
+});
