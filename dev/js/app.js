@@ -1,13 +1,14 @@
-document.getElementById("browseButton")
-.addEventListener("click",()=>{
+document.addEventListener("DOMContentLoaded", async () => {
 
-window.location.href="pages/browse.html";
+    document
+        .getElementById("browseButton")
+        .addEventListener("click", () => {
 
-});
+            window.location.href = "pages/browse.html";
 
-window.addEventListener("load", async () => {
+        });
 
-    await database.load();
+    await database.load("data/genomes.json");
 
     console.log(database.getAllGenomes());
 
