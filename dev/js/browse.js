@@ -57,10 +57,43 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const stats = database.getStatistics();
 
+    const sortSelect = document.getElementById("sortSelect");
+
+    sortSelect.addEventListener("change", () => {
+
+        const sorted =
+            sortGenomes(genomes, sortSelect.value);
+
+        displayGenomes(sorted);
+
+    });
+
     console.log(stats);
 
     updateGenomeCount(stats);
 
-    displayGenomes(genomes);
+    const sorted =
+        sortGenomes(genomes, "nameAsc");
+
+    displayGenomes(sorted);
 
 });
+
+function sortGenomes(genomes, sortOption) {
+    const sorted = [...genomes];
+    const compare = sortFunctions[sortOption];
+
+    if (compare) {
+        sorted.sort(compare);
+    }
+
+    return sorted;
+}
+
+const sortFunctions = {
+    nameAsc: (a, b) => a.name.localeCompare(b.name),
+    nameDesc: (a, b) => b.name.localeCompare(a.name),
+    lengthDesc: (a, b) => b.metadata.length - a.metadata.length,
+    proteinDesc: (a, b) => b.analysis.proteinHits - a.analysis.proteinHits,
+    nucleotideDesc: (a, b) => b.analysis.nucleotideHits - a.analysis.nucleotideHits
+};

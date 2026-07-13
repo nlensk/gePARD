@@ -294,3 +294,19 @@ margin-top:20px;
     color: #0b4f82;
 
 }
+
+.browse-controls {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+
+}
+
+.browse-controls select {
+
+    padding: 6px 10px;
+    font-size: 1rem;
+
+}
