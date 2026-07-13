@@ -25,6 +25,8 @@ class Database {
 
         this.genomes = await response.json();
 
+        this.buildStatistics();
+
         console.log("Number of genomes:");
 
         console.log(this.genomes.length);
@@ -73,7 +75,7 @@ class Database {
 
     }
 
-    getStatistics() {
+    buildStatistics() {
 
         let proteinCandidates = 0;
 
@@ -87,13 +89,27 @@ class Database {
 
         }
 
-        return {
+        this.statistics = {
 
             totalGenomes: this.genomes.length,
 
-            proteinCandidates: proteinCandidates
+            proteinCandidates: proteinCandidates,
+
+            nucleotideCandidates: 0,
+
+            averageGenomeLength: 0,
+
+            largestGenome: null,
+
+            smallestGenome: null
 
         };
+
+    }
+    
+    getStatistics() {
+
+        return this.statistics;
 
     }
 
