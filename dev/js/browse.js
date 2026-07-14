@@ -6,6 +6,15 @@ function createGenomeCard(genome) {
 
     card.className = "genome-card";
 
+    card.style.cursor = "pointer";
+
+    card.addEventListener("click", () => {
+
+        window.location.href =
+            `genome.html?accession=${genome.accession}`;
+
+    });
+
     card.innerHTML = `
         <h2>${genome.name}</h2>
 
