@@ -1,3 +1,5 @@
+let currentGenomes = [];
+
 function createGenomeCard(genome) {
 
     const card = document.createElement("div");
@@ -49,11 +51,32 @@ function updateGenomeCount(stats) {
 
 }
 
+function sortGenomes(genomes, sortOption) {
+    const sorted = [...genomes];
+    const compare = sortFunctions[sortOption];
+
+    if (compare) {
+        sorted.sort(compare);
+    }
+
+    return sorted;
+}
+
+function refreshDisplay(genomes, sortOption) {
+
+    const sorted = sortGenomes(genomes, sortOption);
+
+    displayGenomes(sorted);
+
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     await database.load("../data/genomes.json");
 
     const genomes = database.getAllGenomes();
+
+    currentGenomes = [...genomes];
 
     const stats = database.getStatistics();
 
@@ -61,10 +84,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     sortSelect.addEventListener("change", () => {
 
-        const sorted =
-            sortGenomes(genomes, sortSelect.value);
-
-        displayGenomes(sorted);
+        refreshDisplay(currentGenomes, sortSelect.value);
 
     });
 
@@ -78,17 +98,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     displayGenomes(sorted);
 
 });
-
-function sortGenomes(genomes, sortOption) {
-    const sorted = [...genomes];
-    const compare = sortFunctions[sortOption];
-
-    if (compare) {
-        sorted.sort(compare);
-    }
-
-    return sorted;
-}
 
 const sortFunctions = {
     nameAsc: (a, b) => a.name.localeCompare(b.name),
