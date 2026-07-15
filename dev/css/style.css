@@ -295,6 +295,30 @@ margin-top:20px;
 
 }
 
+.info-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 8px 0;
+
+    border-bottom: 1px solid #ddd;
+
+}
+
+.info-label {
+
+    font-weight: bold;
+
+}
+
+.info-value {
+
+    color: #333;
+
+}
+
 .browse-controls {
 
     display: flex;
