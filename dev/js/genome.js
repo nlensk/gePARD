@@ -9,7 +9,7 @@ function createInfoRow(label, value) {
 
 }
 
-function displayGenomeOverview(genome) {
+function renderGenomePage(genome) {
 
     document.getElementById("genomeContent").innerHTML = `
 
@@ -24,9 +24,48 @@ function displayGenomeOverview(genome) {
             genome.metadata.length.toLocaleString() + " bp"
         )}
 
+        ${displayResistanceAnalysis(genome)}
+
+        ${displayGenomeQuality(genome)}
+
+    `;
+
+}
+
+function displayResistanceAnalysis(genome) {
+
+    return `
+
+        <h3>Resistance Analysis</h3>
+
         ${createInfoRow(
             "Protein Hits",
             genome.analysis.proteinHits
+        )}
+
+        ${createInfoRow(
+            "Nucleotide Hits",
+            genome.analysis.nucleotideHits
+        )}
+
+    `;
+
+}
+
+function displayGenomeQuality(genome) {
+
+    return `
+
+        <h3>Genome Quality</h3>
+
+        ${createInfoRow(
+            "GC Content",
+            genome.metadata.gcContent ?? "Unknown"
+        )}
+
+        ${createInfoRow(
+            "Ambiguous Bases",
+            genome.metadata.ambiguousBases ?? 0
         )}
 
     `;
@@ -49,6 +88,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("genomeTitle")
         .textContent = genome.name;
 
-    displayGenomeOverview(genome);
+    renderGenomePage(genome);
 
 });
