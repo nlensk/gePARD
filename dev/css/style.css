@@ -296,15 +296,24 @@ margin-top:20px;
 }
 
 .info-row {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    padding: 8px 0;
-
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 20px;
+    padding: 10px 0;
     border-bottom: 1px solid #ddd;
+}
 
+@media (max-width: 600px) {
+
+    .info-row {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+
+}
+
+.info-row:last-child {
+    border-bottom: none;
 }
 
 .info-label {
@@ -314,9 +323,8 @@ margin-top:20px;
 }
 
 .info-value {
-
     color: #333;
-
+    overflow-wrap: anywhere;
 }
 
 .browse-controls {

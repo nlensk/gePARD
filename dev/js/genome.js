@@ -2,8 +2,8 @@ function createInfoRow(label, value) {
 
     return `
         <div class="info-row">
-            <span class="info-label">${label}</span>
-            <span class="info-value">${value}</span>
+            <div class="info-label">${label}</div>
+            <div class="info-value">${value}</div>
         </div>
     `;
 
@@ -17,13 +17,41 @@ function displayGenomeOverview(genome) {
 
             <h3>Genome Overview</h3>
 
-            ${createInfoRow("Accession", genome.accession)}
+            ${createInfoRow(
+                "Genome Name",
+                genome.name ?? "Unknown"
+            )}
 
-            ${createInfoRow("Host", genome.host)}
+            ${createInfoRow(
+                "Accession",
+                genome.accession ?? "Unknown"
+            )}
+
+            ${createInfoRow(
+                "Host",
+                genome.host ?? "Unknown"
+            )}
+
+            ${createInfoRow(
+                "Host Genus",
+                genome.hostGenus ?? "Unknown"
+            )}
+
+            ${createInfoRow(
+                "Taxonomy",
+                genome.taxonomy ?? "Unknown"
+            )}
 
             ${createInfoRow(
                 "Genome Length",
-                genome.metadata.length.toLocaleString() + " bp"
+                genome.metadata?.length != null
+                    ? genome.metadata.length.toLocaleString() + " bp"
+                    : "Unknown"
+            )}
+
+            ${createInfoRow(
+                "Gene Count",
+                genome.metadata?.geneCount ?? "Unknown"
             )}
 
         </section>
@@ -72,6 +100,11 @@ function displayResistanceAnalysis(genome) {
 
 function displayGenomeQuality(genome) {
 
+    const gcContent =
+        genome.metadata?.gc != null
+            ? `${genome.metadata.gc}%`
+            : "Unknown";
+
     return `
 
         <section class="genome-section">
@@ -80,12 +113,12 @@ function displayGenomeQuality(genome) {
 
             ${createInfoRow(
                 "GC Content",
-                genome.metadata.gcContent ?? "Unknown"
+                gcContent
             )}
 
             ${createInfoRow(
                 "Ambiguous Bases",
-                genome.metadata.ambiguousBases ?? 0
+                genome.metadata?.ambiguousBases ?? "Unknown"
             )}
 
         </section>

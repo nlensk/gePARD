@@ -41,7 +41,8 @@
   {
       "length":115154,
       "gc":53,
-      "geneCount":110
+      "geneCount":110,
+      "ambiguousBases":null
   },
 
   "analysis":
