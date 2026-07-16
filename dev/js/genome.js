@@ -78,21 +78,6 @@ function displayGenomeOverview(genome) {
             )}
 
             ${createInfoRow(
-                "Host",
-                genome.host ?? "Unknown"
-            )}
-
-            ${createInfoRow(
-                "Host Genus",
-                genome.hostGenus ?? "Unknown"
-            )}
-
-            ${createInfoRow(
-                "Taxonomy",
-                genome.taxonomy ?? "Unknown"
-            )}
-
-            ${createInfoRow(
                 "Genome Length",
                 genome.metadata?.length != null
                     ? genome.metadata.length.toLocaleString() + " bp"
@@ -117,6 +102,8 @@ function renderGenomePage(genome) {
         ${displayGenomeOverview(genome)}
 
         ${displayResistanceAnalysis(genome)}
+
+        ${displayTaxonomyAndHost(genome)}
 
         ${displayGenomeQuality(genome)}
 
@@ -167,6 +154,45 @@ function displayResistanceAnalysis(genome) {
                 sequence and does not by itself demonstrate functional antibiotic
                 resistance.
             </p>
+
+        </section>
+
+    `;
+
+}
+
+function displayTaxonomyAndHost(genome) {
+
+    return `
+
+        <section class="genome-section">
+
+            <h3>Taxonomy and Host</h3>
+
+            ${createInfoRow(
+                "Viral Classification",
+                genome.taxonomy ?? "Unknown"
+            )}
+
+            ${createInfoRow(
+                "Host Organism",
+                genome.host
+                    ? `<em>${genome.host}</em>`
+                    : "Unknown"
+            )}
+
+            ${createInfoRow(
+                "Host Genus",
+                genome.hostGenus
+                    ? `
+                        <a href="browse.html?search=${encodeURIComponent(
+                            genome.hostGenus
+                        )}">
+                            <em>${genome.hostGenus}</em>
+                        </a>
+                    `
+                    : "Unknown"
+            )}
 
         </section>
 
