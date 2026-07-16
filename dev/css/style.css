@@ -376,3 +376,40 @@ margin-top:20px;
     padding-bottom: 8px;
 
 }
+
+.analysis-status {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.status-high {
+    background: #fbe9e7;
+    color: #a93226;
+    border: 1px solid #e6b0aa;
+}
+
+.status-review {
+    background: #fff4d6;
+    color: #7d5a00;
+    border: 1px solid #e6c86e;
+}
+
+.status-none {
+    background: #eaf7ef;
+    color: #27633c;
+    border: 1px solid #9fd4b1;
+}
+
+.analysis-note {
+    margin-top: 18px;
+    padding: 12px;
+    background: #f5f7fa;
+    border-left: 4px solid #083358;
+    line-height: 1.5;
+    font-size: 0.92rem;
+    color: #4a5568;
+}
