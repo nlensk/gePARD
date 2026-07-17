@@ -81,8 +81,7 @@ function displayEmptyState() {
         document.createElement("p");
 
     message.textContent =
-        "Try searching by genome name, accession, " +
-        "host, host genus, or taxonomy.";
+        "Try changing the search term or resistance-status filter.";
 
     const clearButton =
         document.createElement("button");
@@ -99,6 +98,9 @@ function displayEmptyState() {
         const sortSelect =
             document.getElementById("sortSelect");
 
+        const hitFilter =
+            document.getElementById("hitFilter");
+
         searchInput.value = "";
 
         document.title =
@@ -107,7 +109,8 @@ function displayEmptyState() {
         refreshDisplay(
             currentGenomes,
             sortSelect.value,
-            ""
+            "",
+            hitFilter.value
         );
 
         searchInput.focus();
@@ -154,6 +157,67 @@ function searchGenomes(genomes, query) {
 
 }
 
+function filterGenomesByHitStatus(genomes, filterOption) {
+
+    if (filterOption === "all") {
+        return [...genomes];
+    }
+
+    return genomes.filter(genome => {
+
+        const analysis = genome.analysis ?? {};
+
+        const proteinHits =
+            analysis.proteinHits ?? 0;
+
+        const nucleotideHits =
+            analysis.nucleotideHits ?? 0;
+
+        const highConfidenceProteinHits =
+            analysis.highConfidenceProteinHits ?? 0;
+
+        const highConfidenceNucleotideHits =
+            analysis.highConfidenceNucleotideHits ?? 0;
+
+        if (filterOption === "anyHits") {
+
+            return proteinHits > 0 ||
+                nucleotideHits > 0;
+
+        }
+
+        if (filterOption === "proteinHits") {
+
+            return proteinHits > 0;
+
+        }
+
+        if (filterOption === "nucleotideHits") {
+
+            return nucleotideHits > 0;
+
+        }
+
+        if (filterOption === "highConfidence") {
+
+            return highConfidenceProteinHits > 0 ||
+                highConfidenceNucleotideHits > 0;
+
+        }
+
+        if (filterOption === "noHits") {
+
+            return proteinHits === 0 &&
+                nucleotideHits === 0;
+
+        }
+
+        return true;
+
+    });
+
+}
+
 function getSearchQueryFromUrl() {
 
     const parameters =
@@ -194,16 +258,27 @@ function sortGenomes(genomes, sortOption) {
     return sorted;
 }
 
-function refreshDisplay(genomes, sortOption, searchQuery = "") {
+function refreshDisplay(
+    genomes,
+    sortOption,
+    searchQuery = "",
+    hitFilterOption = "all"
+) {
 
     const matchingGenomes =
         searchGenomes(genomes, searchQuery);
 
+    const filteredGenomes =
+        filterGenomesByHitStatus(
+            matchingGenomes,
+            hitFilterOption
+        );
+
     const sortedGenomes =
-        sortGenomes(matchingGenomes, sortOption);
+        sortGenomes(filteredGenomes, sortOption);
 
     updateGenomeCount(
-        matchingGenomes.length,
+        filteredGenomes.length,
         genomes.length
     );
 
@@ -226,6 +301,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const searchInput =
         document.getElementById("searchInput");
 
+    const hitFilter =
+        document.getElementById("hitFilter");
+
     const initialSearchQuery =
         getSearchQueryFromUrl();
 
@@ -241,7 +319,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         refreshDisplay(
             currentGenomes,
             sortSelect.value,
-            searchInput.value
+            searchInput.value,
+            hitFilter.value
         );
 
     });
@@ -251,7 +330,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         refreshDisplay(
             currentGenomes,
             sortSelect.value,
-            searchInput.value
+            searchInput.value,
+            hitFilter.value
+        );
+
+    });
+
+    hitFilter.addEventListener("change", () => {
+
+        refreshDisplay(
+            currentGenomes,
+            sortSelect.value,
+            searchInput.value,
+            hitFilter.value
         );
 
     });

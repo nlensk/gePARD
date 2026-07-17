@@ -42,6 +42,36 @@
             id="searchInput"
             placeholder="Genome, host, accession...">
 
+        <label for="hitFilter">Resistance status:</label>
+
+        <select id="hitFilter">
+
+            <option value="all">
+                All genomes
+            </option>
+
+            <option value="anyHits">
+                Any resistance-associated hits
+            </option>
+
+            <option value="proteinHits">
+                Protein hits
+            </option>
+
+            <option value="nucleotideHits">
+                Nucleotide hits
+            </option>
+
+            <option value="highConfidence">
+                High-confidence candidates
+            </option>
+
+            <option value="noHits">
+                No detected hits
+            </option>
+
+        </select>
+
         <label for="sortSelect">Sort by:</label>
 
         <select id="sortSelect">
