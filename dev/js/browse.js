@@ -85,6 +85,15 @@ function searchGenomes(genomes, query) {
 
 }
 
+function getSearchQueryFromUrl() {
+
+    const parameters =
+        new URLSearchParams(window.location.search);
+
+    return parameters.get("search") ?? "";
+
+}
+
 function updateGenomeCount(stats) {
 
     document.getElementById("genomeCount").textContent =
@@ -129,6 +138,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const searchInput =
         document.getElementById("searchInput");
+
+    const initialSearchQuery =
+        getSearchQueryFromUrl();
+
+    searchInput.value = initialSearchQuery;
+
+    if (initialSearchQuery) {
+        document.title =
+            `Search: ${initialSearchQuery} | PARD`;
+    }
 
     sortSelect.addEventListener("change", () => {
 
