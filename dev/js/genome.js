@@ -59,6 +59,39 @@ function createStatusBadge(status) {
 
 }
 
+function displayGenomeActions(genome) {
+
+    const ncbiUrl =
+        `https://www.ncbi.nlm.nih.gov/nuccore/${encodeURIComponent(
+            genome.accession
+        )}`;
+
+    return `
+
+        <div class="genome-actions">
+
+            <a
+                class="action-button action-secondary"
+                href="browse.html"
+            >
+                ← Back to Browse
+            </a>
+
+            <a
+                class="action-button action-primary"
+                href="${ncbiUrl}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                View in NCBI
+            </a>
+
+        </div>
+
+    `;
+
+}
+
 function displayGenomeOverview(genome) {
 
     return `
@@ -98,6 +131,8 @@ function displayGenomeOverview(genome) {
 function renderGenomePage(genome) {
 
     document.getElementById("genomeContent").innerHTML = `
+
+        ${displayGenomeActions(genome)}
 
         ${displayGenomeOverview(genome)}
 
@@ -246,6 +281,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         document.getElementById("genomeTitle")
             .textContent = "Genome not found";
+        
+        document.getElementById("genomeAccession")
+            .textContent = "";
+        
+        document.title = "Genome not found | PARD";
 
         document.getElementById("genomeContent")
             .innerHTML = `
@@ -269,6 +309,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     document.getElementById("genomeTitle")
         .textContent = genome.name;
+    
+    document.getElementById("genomeAccession")
+        .textContent = genome.accession;
+
+    document.title =
+        `${genome.name} (${genome.accession}) | PARD`;
 
     renderGenomePage(genome);
 
