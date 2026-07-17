@@ -43,6 +43,14 @@ function displayGenomes(genomes) {
 
     container.innerHTML = "";
 
+    if (genomes.length === 0) {
+
+        displayEmptyState();
+
+        return;
+
+    }
+
     for (const genome of genomes) {
 
         const card = createGenomeCard(genome);
@@ -50,6 +58,67 @@ function displayGenomes(genomes) {
         container.appendChild(card);
 
     }
+
+}
+
+function displayEmptyState() {
+
+    const container =
+        document.getElementById("genomeContainer");
+
+    const emptyState =
+        document.createElement("div");
+
+    emptyState.className = "empty-results";
+
+    const heading =
+        document.createElement("h2");
+
+    heading.textContent =
+        "No genomes matched your search";
+
+    const message =
+        document.createElement("p");
+
+    message.textContent =
+        "Try searching by genome name, accession, " +
+        "host, host genus, or taxonomy.";
+
+    const clearButton =
+        document.createElement("button");
+
+    clearButton.type = "button";
+    clearButton.className = "clear-search-button";
+    clearButton.textContent = "Clear Search";
+
+    clearButton.addEventListener("click", () => {
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+        const sortSelect =
+            document.getElementById("sortSelect");
+
+        searchInput.value = "";
+
+        document.title =
+            "Browse Genomes | PARD";
+
+        refreshDisplay(
+            currentGenomes,
+            sortSelect.value,
+            ""
+        );
+
+        searchInput.focus();
+
+    });
+
+    emptyState.appendChild(heading);
+    emptyState.appendChild(message);
+    emptyState.appendChild(clearButton);
+
+    container.appendChild(emptyState);
 
 }
 
