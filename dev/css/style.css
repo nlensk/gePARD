@@ -495,3 +495,9 @@ margin-top:20px;
 .action-secondary:hover {
     background: #edf5fa;
 }
+
+#genomeCount {
+    margin-bottom: 18px;
+    color: #5f6b76;
+    font-weight: 600;
+}

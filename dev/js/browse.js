@@ -94,10 +94,23 @@ function getSearchQueryFromUrl() {
 
 }
 
-function updateGenomeCount(stats) {
+function updateGenomeCount(visibleCount, totalCount) {
 
-    document.getElementById("genomeCount").textContent =
-        `${stats.totalGenomes} genomes loaded`;
+    const countElement =
+        document.getElementById("genomeCount");
+
+    if (visibleCount === totalCount) {
+
+        countElement.textContent =
+            `Showing all ${totalCount.toLocaleString()} genomes`;
+
+        return;
+
+    }
+
+    countElement.textContent =
+        `Showing ${visibleCount.toLocaleString()} of ` +
+        `${totalCount.toLocaleString()} genomes`;
 
 }
 
@@ -119,6 +132,11 @@ function refreshDisplay(genomes, sortOption, searchQuery = "") {
 
     const sortedGenomes =
         sortGenomes(matchingGenomes, sortOption);
+
+    updateGenomeCount(
+        matchingGenomes.length,
+        genomes.length
+    );
 
     displayGenomes(sortedGenomes);
 
@@ -170,8 +188,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     console.log(stats);
-
-    updateGenomeCount(stats);
 
     refreshDisplay(
         currentGenomes,
