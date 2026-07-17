@@ -53,6 +53,38 @@ function displayGenomes(genomes) {
 
 }
 
+function searchGenomes(genomes, query) {
+
+    const normalizedQuery = query
+        .trim()
+        .toLowerCase();
+
+    if (normalizedQuery === "") {
+        return [...genomes];
+    }
+
+    return genomes.filter(genome => {
+
+        const searchableFields = [
+            genome.name,
+            genome.accession,
+            genome.host,
+            genome.hostGenus,
+            genome.taxonomy
+        ];
+
+        return searchableFields.some(field => {
+
+            return String(field ?? "")
+                .toLowerCase()
+                .includes(normalizedQuery);
+
+        });
+
+    });
+
+}
+
 function updateGenomeCount(stats) {
 
     document.getElementById("genomeCount").textContent =
@@ -71,11 +103,15 @@ function sortGenomes(genomes, sortOption) {
     return sorted;
 }
 
-function refreshDisplay(genomes, sortOption) {
+function refreshDisplay(genomes, sortOption, searchQuery = "") {
 
-    const sorted = sortGenomes(genomes, sortOption);
+    const matchingGenomes =
+        searchGenomes(genomes, searchQuery);
 
-    displayGenomes(sorted);
+    const sortedGenomes =
+        sortGenomes(matchingGenomes, sortOption);
+
+    displayGenomes(sortedGenomes);
 
 }
 
@@ -91,9 +127,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const sortSelect = document.getElementById("sortSelect");
 
+    const searchInput =
+        document.getElementById("searchInput");
+
     sortSelect.addEventListener("change", () => {
 
-        refreshDisplay(currentGenomes, sortSelect.value);
+        refreshDisplay(
+            currentGenomes,
+            sortSelect.value,
+            searchInput.value
+        );
+
+    });
+
+    searchInput.addEventListener("input", () => {
+
+        refreshDisplay(
+            currentGenomes,
+            sortSelect.value,
+            searchInput.value
+        );
 
     });
 
@@ -101,17 +154,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     updateGenomeCount(stats);
 
-    const sorted =
-        sortGenomes(genomes, "nameAsc");
-
-    displayGenomes(sorted);
+    refreshDisplay(
+        currentGenomes,
+        sortSelect.value,
+        searchInput.value
+    );
 
 });
 
 const sortFunctions = {
     nameAsc: (a, b) => a.name.localeCompare(b.name),
     nameDesc: (a, b) => b.name.localeCompare(a.name),
-    lengthDesc: (a, b) => b.metadata.length - a.metadata.length,
-    proteinDesc: (a, b) => b.analysis.proteinHits - a.analysis.proteinHits,
-    nucleotideDesc: (a, b) => b.analysis.nucleotideHits - a.analysis.nucleotideHits
+
+    lengthDesc:
+        (a, b) => b.metadata.length - a.metadata.length,
+
+    lengthAsc:
+        (a, b) => a.metadata.length - b.metadata.length,
+
+    proteinDesc:
+        (a, b) =>
+            b.analysis.proteinHits -
+            a.analysis.proteinHits,
+
+    nucleotideDesc:
+        (a, b) =>
+            b.analysis.nucleotideHits -
+            a.analysis.nucleotideHits
 };
