@@ -1,5 +1,9 @@
 let currentGenomes = [];
 
+let currentPage = 1;
+
+const genomesPerPage = 2;
+
 function getCandidateStatus(genome) {
 
     const analysis =
@@ -148,9 +152,13 @@ function displayEmptyState() {
     clearButton.addEventListener("click", () => {
 
         const searchInput =
-            document.getElementById("searchInput");
+            document.getElementById(
+                "searchInput"
+            );
 
         searchInput.value = "";
+
+        currentPage = 1;
 
         document.title =
             "Browse Genomes | PARD";
@@ -302,16 +310,152 @@ function sortGenomes(genomes, sortOption) {
     return sorted;
 }
 
+function paginateGenomes(genomes, page, pageSize) {
+
+    const startIndex =
+        (page - 1) * pageSize;
+
+    const endIndex =
+        startIndex + pageSize;
+
+    return genomes.slice(
+        startIndex,
+        endIndex
+    );
+
+}
+
+function scrollToBrowseTop() {
+
+    const genomeCount =
+        document.getElementById(
+            "genomeCount"
+        );
+
+    genomeCount.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+function displayPagination(totalResults) {
+
+    const container =
+        document.getElementById(
+            "paginationControls"
+        );
+
+    container.innerHTML = "";
+
+    const totalPages =
+        Math.ceil(
+            totalResults / genomesPerPage
+        );
+
+    if (totalPages <= 1) {
+        return;
+    }
+
+    const previousButton =
+        document.createElement("button");
+
+    previousButton.type = "button";
+    previousButton.className =
+        "pagination-button";
+
+    previousButton.textContent =
+        "Previous";
+
+    previousButton.disabled =
+        currentPage === 1;
+
+    const pageInformation =
+        document.createElement("span");
+
+    pageInformation.className =
+        "pagination-information";
+
+    pageInformation.textContent =
+        `Page ${currentPage} of ${totalPages}`;
+
+    const nextButton =
+        document.createElement("button");
+
+    nextButton.type = "button";
+    nextButton.className =
+        "pagination-button";
+
+    nextButton.textContent =
+        "Next";
+
+    nextButton.disabled =
+        currentPage === totalPages;
+
+    previousButton.addEventListener(
+        "click",
+        () => {
+
+            if (currentPage > 1) {
+
+                currentPage--;
+
+                applyBrowseState();
+
+                scrollToBrowseTop();
+
+            }
+
+        }
+    );
+
+    nextButton.addEventListener(
+        "click",
+        () => {
+
+            if (currentPage < totalPages) {
+
+                currentPage++;
+
+                applyBrowseState();
+
+                scrollToBrowseTop();
+
+            }
+
+        }
+    );
+
+    container.appendChild(
+        previousButton
+    );
+
+    container.appendChild(
+        pageInformation
+    );
+
+    container.appendChild(
+        nextButton
+    );
+
+}
+
 function applyBrowseState() {
 
     const searchInput =
-        document.getElementById("searchInput");
+        document.getElementById(
+            "searchInput"
+        );
 
     const hitFilter =
-        document.getElementById("hitFilter");
+        document.getElementById(
+            "hitFilter"
+        );
 
     const sortSelect =
-        document.getElementById("sortSelect");
+        document.getElementById(
+            "sortSelect"
+        );
 
     const searchQuery =
         searchInput.value;
@@ -340,12 +484,38 @@ function applyBrowseState() {
             sortOption
         );
 
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                sortedGenomes.length /
+                genomesPerPage
+            )
+        );
+
+    if (currentPage > totalPages) {
+        currentPage = totalPages;
+    }
+
+    const paginatedGenomes =
+        paginateGenomes(
+            sortedGenomes,
+            currentPage,
+            genomesPerPage
+        );
+
     updateGenomeCount(
         filteredGenomes.length,
         currentGenomes.length
     );
 
-    displayGenomes(sortedGenomes);
+    displayGenomes(
+        paginatedGenomes
+    );
+
+    displayPagination(
+        filteredGenomes.length
+    );
 
 }
 
@@ -379,17 +549,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     sortSelect.addEventListener("change", () => {
 
+        currentPage = 1;
+
         applyBrowseState();
 
     });
 
     searchInput.addEventListener("input", () => {
 
+        currentPage = 1;
+
         applyBrowseState();
 
     });
 
     hitFilter.addEventListener("change", () => {
+
+        currentPage = 1;
 
         applyBrowseState();
 
