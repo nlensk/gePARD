@@ -2,7 +2,27 @@ let currentGenomes = [];
 
 let currentPage = 1;
 
+let isRestoringUrlState = false;
+
 const genomesPerPage = 2;
+
+const validHitFilters = [
+    "all",
+    "anyHits",
+    "proteinHits",
+    "nucleotideHits",
+    "highConfidence",
+    "noHits"
+];
+
+const validSortOptions = [
+    "nameAsc",
+    "nameDesc",
+    "lengthDesc",
+    "lengthAsc",
+    "proteinDesc",
+    "nucleotideDesc"
+];
 
 function getCandidateStatus(genome) {
 
@@ -270,32 +290,198 @@ function filterGenomesByHitStatus(genomes, filterOption) {
 
 }
 
-function getSearchQueryFromUrl() {
+function getBrowseStateFromUrl() {
 
     const parameters =
-        new URLSearchParams(window.location.search);
+        new URLSearchParams(
+            window.location.search
+        );
 
-    return parameters.get("search") ?? "";
+    const searchQuery =
+        parameters.get("search") ?? "";
+
+    const requestedHitFilter =
+        parameters.get("filter") ?? "all";
+
+    const requestedSortOption =
+        parameters.get("sort") ?? "nameAsc";
+
+    const hitFilter =
+        validHitFilters.includes(
+            requestedHitFilter
+        )
+            ? requestedHitFilter
+            : "all";
+
+    const sortOption =
+        validSortOptions.includes(
+            requestedSortOption
+        )
+            ? requestedSortOption
+            : "nameAsc";
+
+    const pageValue =
+        Number(parameters.get("page"));
+
+    const page =
+        Number.isInteger(pageValue) &&
+        pageValue > 0
+            ? pageValue
+            : 1;
+
+    return {
+        searchQuery,
+        hitFilter,
+        sortOption,
+        page
+    };
 
 }
 
-function updateGenomeCount(visibleCount, totalCount) {
+function updateBrowseUrl() {
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+    const hitFilter =
+        document.getElementById(
+            "hitFilter"
+        );
+
+    const sortSelect =
+        document.getElementById(
+            "sortSelect"
+        );
+
+    const parameters =
+        new URLSearchParams();
+
+    const searchQuery =
+        searchInput.value.trim();
+
+    if (searchQuery !== "") {
+
+        parameters.set(
+            "search",
+            searchQuery
+        );
+
+    }
+
+    if (hitFilter.value !== "all") {
+
+        parameters.set(
+            "filter",
+            hitFilter.value
+        );
+
+    }
+
+    if (sortSelect.value !== "nameAsc") {
+
+        parameters.set(
+            "sort",
+            sortSelect.value
+        );
+
+    }
+
+    if (currentPage > 1) {
+
+        parameters.set(
+            "page",
+            currentPage
+        );
+
+    }
+
+    const queryString =
+        parameters.toString();
+
+    const newUrl =
+        queryString === ""
+            ? window.location.pathname
+            : `${window.location.pathname}?${queryString}`;
+
+    window.history.replaceState(
+        {},
+        "",
+        newUrl
+    );
+
+}
+
+function updateBrowseTitle() {
+
+    const searchQuery =
+        document
+            .getElementById("searchInput")
+            .value
+            .trim();
+
+    if (searchQuery === "") {
+
+        document.title =
+            "Browse Genomes | PARD";
+
+        return;
+
+    }
+
+    document.title =
+        `Search: ${searchQuery} | PARD`;
+
+}
+
+function updateGenomeCount(
+    pageResultCount,
+    filteredTotal,
+    databaseTotal
+) {
 
     const countElement =
-        document.getElementById("genomeCount");
+        document.getElementById(
+            "genomeCount"
+        );
 
-    if (visibleCount === totalCount) {
+    if (filteredTotal === 0) {
 
         countElement.textContent =
-            `Showing all ${totalCount.toLocaleString()} genomes`;
+            `Showing 0 of ` +
+            `${databaseTotal.toLocaleString()} genomes`;
+
+        return;
+
+    }
+
+    const firstResult =
+        (currentPage - 1) *
+        genomesPerPage + 1;
+
+    const lastResult =
+        firstResult +
+        pageResultCount - 1;
+
+    if (filteredTotal === databaseTotal) {
+
+        countElement.textContent =
+            `Showing genomes ` +
+            `${firstResult.toLocaleString()}–` +
+            `${lastResult.toLocaleString()} ` +
+            `of ${databaseTotal.toLocaleString()}`;
 
         return;
 
     }
 
     countElement.textContent =
-        `Showing ${visibleCount.toLocaleString()} of ` +
-        `${totalCount.toLocaleString()} genomes`;
+        `Showing genomes ` +
+        `${firstResult.toLocaleString()}–` +
+        `${lastResult.toLocaleString()} ` +
+        `of ${filteredTotal.toLocaleString()} matches ` +
+        `(${databaseTotal.toLocaleString()} total)`;
 
 }
 
@@ -505,6 +691,7 @@ function applyBrowseState() {
         );
 
     updateGenomeCount(
+        paginatedGenomes.length,
         filteredGenomes.length,
         currentGenomes.length
     );
@@ -516,6 +703,54 @@ function applyBrowseState() {
     displayPagination(
         filteredGenomes.length
     );
+
+    if (!isRestoringUrlState) {
+
+        updateBrowseUrl();
+
+    }
+
+    updateBrowseTitle();
+
+}
+
+function restoreBrowseStateFromUrl() {
+
+    isRestoringUrlState = true;
+
+    const state =
+        getBrowseStateFromUrl();
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+    const hitFilter =
+        document.getElementById(
+            "hitFilter"
+        );
+
+    const sortSelect =
+        document.getElementById(
+            "sortSelect"
+        );
+
+    searchInput.value =
+        state.searchQuery;
+
+    hitFilter.value =
+        state.hitFilter;
+
+    sortSelect.value =
+        state.sortOption;
+
+    currentPage =
+        state.page;
+
+    applyBrowseState();
+
+    isRestoringUrlState = false;
 
 }
 
@@ -537,15 +772,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const hitFilter =
         document.getElementById("hitFilter");
 
-    const initialSearchQuery =
-        getSearchQueryFromUrl();
+    const initialState =
+        getBrowseStateFromUrl();
 
-    searchInput.value = initialSearchQuery;
+    searchInput.value =
+        initialState.searchQuery;
 
-    if (initialSearchQuery) {
-        document.title =
-            `Search: ${initialSearchQuery} | PARD`;
-    }
+    hitFilter.value =
+        initialState.hitFilter;
+
+    sortSelect.value =
+        initialState.sortOption;
+
+    currentPage =
+        initialState.page;
 
     sortSelect.addEventListener("change", () => {
 
@@ -597,3 +837,12 @@ const sortFunctions = {
             b.analysis.nucleotideHits -
             a.analysis.nucleotideHits
 };
+
+window.addEventListener(
+    "popstate",
+    () => {
+
+        restoreBrowseStateFromUrl();
+
+    }
+);
