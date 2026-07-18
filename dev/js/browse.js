@@ -95,23 +95,12 @@ function displayEmptyState() {
         const searchInput =
             document.getElementById("searchInput");
 
-        const sortSelect =
-            document.getElementById("sortSelect");
-
-        const hitFilter =
-            document.getElementById("hitFilter");
-
         searchInput.value = "";
 
         document.title =
             "Browse Genomes | PARD";
 
-        refreshDisplay(
-            currentGenomes,
-            sortSelect.value,
-            "",
-            hitFilter.value
-        );
+        applyBrowseState();
 
         searchInput.focus();
 
@@ -258,15 +247,31 @@ function sortGenomes(genomes, sortOption) {
     return sorted;
 }
 
-function refreshDisplay(
-    genomes,
-    sortOption,
-    searchQuery = "",
-    hitFilterOption = "all"
-) {
+function applyBrowseState() {
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const hitFilter =
+        document.getElementById("hitFilter");
+
+    const sortSelect =
+        document.getElementById("sortSelect");
+
+    const searchQuery =
+        searchInput.value;
+
+    const hitFilterOption =
+        hitFilter.value;
+
+    const sortOption =
+        sortSelect.value;
 
     const matchingGenomes =
-        searchGenomes(genomes, searchQuery);
+        searchGenomes(
+            currentGenomes,
+            searchQuery
+        );
 
     const filteredGenomes =
         filterGenomesByHitStatus(
@@ -275,11 +280,14 @@ function refreshDisplay(
         );
 
     const sortedGenomes =
-        sortGenomes(filteredGenomes, sortOption);
+        sortGenomes(
+            filteredGenomes,
+            sortOption
+        );
 
     updateGenomeCount(
         filteredGenomes.length,
-        genomes.length
+        currentGenomes.length
     );
 
     displayGenomes(sortedGenomes);
@@ -316,44 +324,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     sortSelect.addEventListener("change", () => {
 
-        refreshDisplay(
-            currentGenomes,
-            sortSelect.value,
-            searchInput.value,
-            hitFilter.value
-        );
+        applyBrowseState();
 
     });
 
     searchInput.addEventListener("input", () => {
 
-        refreshDisplay(
-            currentGenomes,
-            sortSelect.value,
-            searchInput.value,
-            hitFilter.value
-        );
+        applyBrowseState();
 
     });
 
     hitFilter.addEventListener("change", () => {
 
-        refreshDisplay(
-            currentGenomes,
-            sortSelect.value,
-            searchInput.value,
-            hitFilter.value
-        );
+        applyBrowseState();
 
     });
 
     console.log(stats);
 
-    refreshDisplay(
-        currentGenomes,
-        sortSelect.value,
-        searchInput.value
-    );
+    applyBrowseState();
 
 });
 
