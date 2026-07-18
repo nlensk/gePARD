@@ -1,6 +1,57 @@
 let currentGenomes = [];
 
+function getCandidateStatus(genome) {
+
+    const analysis =
+        genome.analysis ?? {};
+
+    const highConfidenceProtein =
+        analysis.highConfidenceProteinHits ?? 0;
+
+    const highConfidenceNucleotide =
+        analysis.highConfidenceNucleotideHits ?? 0;
+
+    const proteinHits =
+        analysis.proteinHits ?? 0;
+
+    const nucleotideHits =
+        analysis.nucleotideHits ?? 0;
+
+    if (
+        highConfidenceProtein > 0 ||
+        highConfidenceNucleotide > 0
+    ) {
+
+        return {
+            label: "High-confidence candidate",
+            className: "status-high"
+        };
+
+    }
+
+    if (
+        proteinHits > 0 ||
+        nucleotideHits > 0
+    ) {
+
+        return {
+            label: "Resistance-associated hits detected",
+            className: "status-review"
+        };
+
+    }
+
+    return {
+        label: "No resistance-associated hits detected",
+        className: "status-none"
+    };
+
+}
+
 function createGenomeCard(genome) {
+
+    const status =
+        getCandidateStatus(genome);
 
     const card = document.createElement("div");
 
@@ -17,6 +68,10 @@ function createGenomeCard(genome) {
 
     card.innerHTML = `
         <h2>${genome.name}</h2>
+
+        <div class="analysis-status ${status.className}">
+            ${status.label}
+        </div>
 
         <p><strong>Accession:</strong> ${genome.accession}</p>
 
