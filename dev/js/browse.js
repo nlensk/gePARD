@@ -4,7 +4,7 @@ let currentPage = 1;
 
 let isRestoringUrlState = false;
 
-const genomesPerPage = 2;
+const genomesPerPage = 12;
 
 const validHitFilters = [
     "all",
@@ -77,18 +77,58 @@ function createGenomeCard(genome) {
     const status =
         getCandidateStatus(genome);
 
-    const card = document.createElement("div");
+    const card =
+        document.createElement("div");
 
-    card.className = "genome-card";
+    card.className =
+        "genome-card";
 
-    card.style.cursor = "pointer";
+    card.tabIndex = 0;
 
-    card.addEventListener("click", () => {
+    card.setAttribute(
+        "role",
+        "link"
+    );
+
+    card.setAttribute(
+        "aria-label",
+        `View details for ${genome.name}`
+    );
+
+    function openGenomePage() {
+
+        const accession =
+            encodeURIComponent(
+                genome.accession
+            );
 
         window.location.href =
-            `genome.html?accession=${genome.accession}`;
+            `genome.html?accession=${accession}`;
 
-    });
+    }
+
+    card.addEventListener(
+        "click",
+        openGenomePage
+    );
+
+    card.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter" ||
+                event.key === " "
+            ) {
+
+                event.preventDefault();
+
+                openGenomePage();
+
+            }
+
+        }
+    );
 
     card.innerHTML = `
         <h2>${genome.name}</h2>
@@ -97,18 +137,30 @@ function createGenomeCard(genome) {
             ${status.label}
         </div>
 
-        <p><strong>Accession:</strong> ${genome.accession}</p>
+        <p>
+            <strong>Accession:</strong>
+            ${genome.accession}
+        </p>
 
-        <p><strong>Host:</strong> ${genome.host}</p>
+        <p>
+            <strong>Host:</strong>
+            ${genome.host}
+        </p>
 
-        <p><strong>Genome Length:</strong>
-        ${genome.metadata.length.toLocaleString()} bp</p>
+        <p>
+            <strong>Genome Length:</strong>
+            ${(genome.metadata?.length ?? 0).toLocaleString()} bp
+        </p>
 
-        <p><strong>Protein Hits:</strong>
-        ${genome.analysis.proteinHits}</p>
+        <p>
+            <strong>Protein Hits:</strong>
+            ${(genome.analysis?.proteinHits ?? 0).toLocaleString()}
+        </p>
 
-        <p><strong>Nucleotide Hits:</strong>
-        ${genome.analysis.nucleotideHits}</p>
+        <p>
+            <strong>Nucleotide Hits:</strong>
+            ${(genome.analysis?.nucleotideHits ?? 0).toLocaleString()}
+        </p>
     `;
 
     return card;
@@ -154,7 +206,7 @@ function displayEmptyState() {
         document.createElement("h2");
 
     heading.textContent =
-        "No genomes matched your search";
+        "No genomes matched your criteria";
 
     const message =
         document.createElement("p");
@@ -167,27 +219,16 @@ function displayEmptyState() {
 
     clearButton.type = "button";
     clearButton.className = "clear-search-button";
-    clearButton.textContent = "Clear Search";
+    clearButton.textContent = "Reset Search and Filters";
 
-    clearButton.addEventListener("click", () => {
+    clearButton.addEventListener(
+        "click",
+        () => {
 
-        const searchInput =
-            document.getElementById(
-                "searchInput"
-            );
+            resetBrowseState();
 
-        searchInput.value = "";
-
-        currentPage = 1;
-
-        document.title =
-            "Browse Genomes | PARD";
-
-        applyBrowseState();
-
-        searchInput.focus();
-
-    });
+        }
+    );
 
     emptyState.appendChild(heading);
     emptyState.appendChild(message);
@@ -432,6 +473,37 @@ function updateBrowseTitle() {
 
     document.title =
         `Search: ${searchQuery} | PARD`;
+
+}
+
+function resetBrowseState() {
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+    const hitFilter =
+        document.getElementById(
+            "hitFilter"
+        );
+
+    const sortSelect =
+        document.getElementById(
+            "sortSelect"
+        );
+
+    searchInput.value = "";
+
+    hitFilter.value = "all";
+
+    sortSelect.value = "nameAsc";
+
+    currentPage = 1;
+
+    applyBrowseState();
+
+    searchInput.focus();
 
 }
 
@@ -754,11 +826,86 @@ function restoreBrowseStateFromUrl() {
 
 }
 
-document.addEventListener("DOMContentLoaded", async () => {
+function displayLoadError() {
 
-    await database.load("../data/genomes.json");
+    const countElement =
+        document.getElementById(
+            "genomeCount"
+        );
 
-    const genomes = database.getAllGenomes();
+    const genomeContainer =
+        document.getElementById(
+            "genomeContainer"
+        );
+
+    const paginationContainer =
+        document.getElementById(
+            "paginationControls"
+        );
+
+    countElement.textContent = "";
+
+    paginationContainer.innerHTML = "";
+
+    genomeContainer.innerHTML = "";
+
+    const errorMessage =
+        document.createElement("div");
+
+    errorMessage.className =
+        "browse-load-error";
+
+    const heading =
+        document.createElement("h2");
+
+    heading.textContent =
+        "The genome database could not be loaded";
+
+    const message =
+        document.createElement("p");
+
+    message.textContent =
+        "Check that genomes.json is available and contains valid JSON.";
+
+    errorMessage.appendChild(
+        heading
+    );
+
+    errorMessage.appendChild(
+        message
+    );
+
+    genomeContainer.appendChild(
+        errorMessage
+    );
+
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        try {
+
+            await database.load(
+                "../data/genomes.json"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Unable to load the genome database:",
+                error
+            );
+
+            displayLoadError();
+
+            return;
+
+        }
+
+        const genomes =
+            database.getAllGenomes();
 
     currentGenomes = [...genomes];
 
@@ -775,14 +922,47 @@ document.addEventListener("DOMContentLoaded", async () => {
     const initialState =
         getBrowseStateFromUrl();
 
-    searchInput.value =
-        initialState.searchQuery;
+    sortSelect.addEventListener(
+        "change",
+        () => {
 
-    hitFilter.value =
-        initialState.hitFilter;
+            currentPage = 1;
 
-    sortSelect.value =
-        initialState.sortOption;
+            applyBrowseState();
+
+        }
+    );
+
+    searchInput.addEventListener(
+        "input",
+        () => {
+
+            currentPage = 1;
+
+            applyBrowseState();
+
+        }
+    );
+
+    hitFilter.addEventListener(
+        "change",
+        () => {
+
+            currentPage = 1;
+
+            applyBrowseState();
+
+        }
+    );
+
+    resetBrowseButton.addEventListener(
+        "click",
+        () => {
+
+            resetBrowseState();
+
+        }
+    );
 
     currentPage =
         initialState.page;
@@ -817,6 +997,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 
+window.addEventListener(
+    "popstate",
+    () => {
+
+        restoreBrowseStateFromUrl();
+
+    }
+);
+
 const sortFunctions = {
     nameAsc: (a, b) => a.name.localeCompare(b.name),
     nameDesc: (a, b) => b.name.localeCompare(a.name),
@@ -838,11 +1027,3 @@ const sortFunctions = {
             a.analysis.nucleotideHits
 };
 
-window.addEventListener(
-    "popstate",
-    () => {
-
-        restoreBrowseStateFromUrl();
-
-    }
-);

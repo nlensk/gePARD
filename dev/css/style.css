@@ -293,6 +293,7 @@ margin-top:20px;
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
 
     transition:
         transform 0.15s ease,
@@ -300,6 +301,13 @@ margin-top:20px;
 }
 
 .genome-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
+}
+
+.genome-card:focus-visible {
+    outline: 3px solid rgba(11, 79, 130, 0.35);
+    outline-offset: 4px;
     transform: translateY(-2px);
     box-shadow: 0 5px 14px rgba(0, 0, 0, 0.14);
 }
@@ -599,4 +607,46 @@ margin-top:20px;
     text-align: center;
     color: #45515c;
     font-weight: 600;
+}
+
+.reset-browse-button {
+    padding: 7px 14px;
+    border: 1px solid #687782;
+    border-radius: 7px;
+    background: white;
+    color: #34424d;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.reset-browse-button:hover {
+    background: #edf1f4;
+    border-color: #45515c;
+}
+
+.reset-browse-button:focus-visible {
+    outline: 3px solid rgba(11, 79, 130, 0.3);
+    outline-offset: 3px;
+}
+
+.browse-load-error {
+    max-width: 620px;
+    margin: 50px auto;
+    padding: 32px;
+    text-align: center;
+    background: #fff1f0;
+    border: 1px solid #e4aaa5;
+    border-radius: 10px;
+}
+
+.browse-load-error h2 {
+    margin-top: 0;
+    color: #8f2f27;
+}
+
+.browse-load-error p {
+    margin-bottom: 0;
+    color: #643b38;
+    line-height: 1.6;
 }

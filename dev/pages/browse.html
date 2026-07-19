@@ -31,16 +31,20 @@
 
     <h1>Browse Genomes</h1>
 
-    <p id="genomeCount"></p>
+    <p
+        id="genomeCount"
+        aria-live="polite">
+    </p>
 
     <div class="browse-controls">
 
         <label for="searchInput">Search:</label>
 
         <input
-            type="text"
+            type="search"
             id="searchInput"
-            placeholder="Genome, host, accession...">
+            placeholder="Genome, host, accession..."
+            autocomplete="off">
 
         <label for="hitFilter">Resistance status:</label>
 
@@ -85,10 +89,17 @@
 
         </select>
 
+        <button
+            type="button"
+            id="resetBrowseButton"
+            class="reset-browse-button">
+            Reset All
+        </button>
+
     </div>
 
     <div id="genomeContainer"></div>
-    
+
     <div id="paginationControls"></div>
 
 </main>
