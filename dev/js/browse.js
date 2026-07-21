@@ -147,20 +147,55 @@ function createGenomeCard(genome) {
             ${genome.host}
         </p>
 
-        <p>
-            <strong>Genome Length:</strong>
-            ${(genome.metadata?.length ?? 0).toLocaleString()} bp
-        </p>
+        <div class="card-metrics">
 
-        <p>
-            <strong>Protein Hits:</strong>
-            ${(genome.analysis?.proteinHits ?? 0).toLocaleString()}
-        </p>
+            <div>
 
-        <p>
-            <strong>Nucleotide Hits:</strong>
-            ${(genome.analysis?.nucleotideHits ?? 0).toLocaleString()}
-        </p>
+                <span class="metric-label">
+                    Genome length
+                </span>
+
+                <strong>
+                    ${(genome.metadata?.length ?? 0).toLocaleString()} bp
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span class="metric-label">
+                    Protein hits
+                </span>
+
+                <strong>
+                    ${(genome.analysis?.proteinHits ?? 0).toLocaleString()}
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span class="metric-label">
+                    Nucleotide hits
+                </span>
+
+                <strong>
+                    ${(genome.analysis?.nucleotideHits ?? 0).toLocaleString()}
+                </strong>
+
+            </div>
+
+        </div>
+
+        <div class="card-link">
+
+            View genome details
+
+            <span aria-hidden="true">
+                →
+            </span>
+
+        </div>
     `;
 
     return card;

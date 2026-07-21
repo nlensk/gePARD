@@ -16,12 +16,38 @@
 
 <header>
 
-    <div class="logo">PARD</div>
+    <a href="../index.html" class="logo">
+        PARD
+    </a>
 
-    <nav>
+    <nav aria-label="Main navigation">
 
-        <a href="../index.html">Home</a>
-        <a href="browse.html">Browse</a>
+        <a href="../index.html">
+            Home
+        </a>
+
+        <a href="search.html">
+            Search
+        </a>
+
+        <a
+            href="browse.html"
+            class="active"
+            aria-current="page">
+            Browse
+        </a>
+
+        <a href="statistics.html">
+            Statistics
+        </a>
+
+        <a href="methods.html">
+            Methods
+        </a>
+
+        <a href="about.html">
+            About
+        </a>
 
     </nav>
 
@@ -29,72 +55,128 @@
 
 <main>
 
-    <h1>Browse Genomes</h1>
+    <section class="browse-intro">
 
-    <p
-        id="genomeCount"
-        aria-live="polite">
-    </p>
+        <h1>Browse Phage Genomes</h1>
 
-    <div class="browse-controls">
+        <p class="browse-description">
+            Search and compare bacteriophage genomes by name, host,
+            accession number, and resistance-associated analysis results.
+        </p>
 
-        <label for="searchInput">Search:</label>
+    </section>
 
-        <input
-            type="search"
-            id="searchInput"
-            placeholder="Genome, host, accession..."
-            autocomplete="off">
+    <section class="browse-toolbar">
 
-        <label for="hitFilter">Resistance status:</label>
+        <div class="browse-controls">
 
-        <select id="hitFilter">
+            <div class="control-group search-control">
 
-            <option value="all">
-                All genomes
-            </option>
+                <label for="searchInput">
+                    Search genomes
+                </label>
 
-            <option value="anyHits">
-                Any resistance-associated hits
-            </option>
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Genome, host, accession..."
+                    autocomplete="off">
 
-            <option value="proteinHits">
-                Protein hits
-            </option>
+            </div>
 
-            <option value="nucleotideHits">
-                Nucleotide hits
-            </option>
+            <div class="control-group">
 
-            <option value="highConfidence">
-                High-confidence candidates
-            </option>
+                <label for="hitFilter">
+                    Resistance status
+                </label>
 
-            <option value="noHits">
-                No detected hits
-            </option>
+                <select id="hitFilter">
 
-        </select>
+                    <option value="all">
+                        All genomes
+                    </option>
 
-        <label for="sortSelect">Sort by:</label>
+                    <option value="anyHits">
+                        Any resistance-associated hits
+                    </option>
 
-        <select id="sortSelect">
+                    <option value="proteinHits">
+                        Protein hits
+                    </option>
 
-            <option value="nameAsc">Name (A–Z)</option>
-            <option value="nameDesc">Name (Z–A)</option>
-            <option value="lengthDesc">Longest Genome</option>
-            <option value="lengthAsc">Shortest Genome</option>
-            <option value="proteinDesc">Most Protein Hits</option>
-            <option value="nucleotideDesc">Most Nucleotide Hits</option>
+                    <option value="nucleotideHits">
+                        Nucleotide hits
+                    </option>
 
-        </select>
+                    <option value="highConfidence">
+                        High-confidence candidates
+                    </option>
 
-        <button
-            type="button"
-            id="resetBrowseButton"
-            class="reset-browse-button">
-            Reset All
-        </button>
+                    <option value="noHits">
+                        No detected hits
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="control-group">
+
+                <label for="sortSelect">
+                    Sort by
+                </label>
+
+                <select id="sortSelect">
+
+                    <option value="nameAsc">
+                        Name (A–Z)
+                    </option>
+
+                    <option value="nameDesc">
+                        Name (Z–A)
+                    </option>
+
+                    <option value="lengthDesc">
+                        Longest Genome
+                    </option>
+
+                    <option value="lengthAsc">
+                        Shortest Genome
+                    </option>
+
+                    <option value="proteinDesc">
+                        Most Protein Hits
+                    </option>
+
+                    <option value="nucleotideDesc">
+                        Most Nucleotide Hits
+                    </option>
+
+                </select>
+
+            </div>
+
+            <button
+                type="button"
+                id="resetBrowseButton"
+                class="reset-browse-button">
+                Reset All
+            </button>
+
+        </div>   
+
+    </section>
+
+    <div class="results-header">
+
+        <p
+            id="genomeCount"
+            aria-live="polite">
+        </p>
+
+        <p class="results-hint">
+            Select a card to view the full genome analysis.
+        </p>
 
     </div>
 
