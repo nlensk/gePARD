@@ -14,23 +14,25 @@ body{
 
 }
 
-header{
+header {
 
-    display:flex;
+    display: flex;
 
-    justify-content:space-between;
+    justify-content: space-between;
 
-    align-items:center;
+    align-items: center;
 
-    padding:20px 60px;
+    padding: 20px 60px;
 
-    background:#083358;
+    background: #083358;
 
-    color:white;
+    color: white;
 
-    position:sticky;
+    position: sticky;
 
-    top:0;
+    top: 0;
+
+    z-index: 1000;
 
 }
 

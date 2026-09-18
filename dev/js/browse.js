@@ -620,14 +620,9 @@ function paginateGenomes(genomes, page, pageSize) {
 
 function scrollToBrowseTop() {
 
-    const genomeCount =
-        document.getElementById(
-            "genomeCount"
-        );
-
-    genomeCount.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
     });
 
 }
@@ -946,13 +941,17 @@ document.addEventListener(
 
     const stats = database.getStatistics();
 
-    const sortSelect = document.getElementById("sortSelect");
+    const sortSelect =
+        document.getElementById("sortSelect");
 
     const searchInput =
         document.getElementById("searchInput");
 
     const hitFilter =
         document.getElementById("hitFilter");
+
+    const resetBrowseButton =
+        document.getElementById("resetBrowseButton");
 
     const initialState =
         getBrowseStateFromUrl();
