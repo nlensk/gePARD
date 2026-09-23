@@ -29642,7 +29642,7 @@
       "proteinHits": 116,
       "nucleotideHits": 1,
       "highConfidenceProteinHits": 0,
-      "highConfidenceNucleotideHits": 0
+      "highConfidenceNucleotideHits": 1
     }
   },
   {
@@ -30524,7 +30524,7 @@
       "proteinHits": 23,
       "nucleotideHits": 2,
       "highConfidenceProteinHits": 0,
-      "highConfidenceNucleotideHits": 0
+      "highConfidenceNucleotideHits": 2
     }
   },
   {
@@ -30577,8 +30577,8 @@
     "analysis": {
       "proteinHits": 24,
       "nucleotideHits": 2,
-      "highConfidenceProteinHits": 0,
-      "highConfidenceNucleotideHits": 0
+      "highConfidenceProteinHits": 3,
+      "highConfidenceNucleotideHits": 2
     }
   },
   {
@@ -54194,7 +54194,7 @@
       "proteinHits": 500,
       "nucleotideHits": 310,
       "highConfidenceProteinHits": 0,
-      "highConfidenceNucleotideHits": 0
+      "highConfidenceNucleotideHits": 1
     }
   },
   {
@@ -59755,8 +59755,8 @@
     "analysis": {
       "proteinHits": 112,
       "nucleotideHits": 3,
-      "highConfidenceProteinHits": 0,
-      "highConfidenceNucleotideHits": 0
+      "highConfidenceProteinHits": 1 ,
+      "highConfidenceNucleotideHits": 2
     }
   },
   {
@@ -65444,7 +65444,7 @@
       "proteinHits": 25,
       "nucleotideHits": 2,
       "highConfidenceProteinHits": 0,
-      "highConfidenceNucleotideHits": 0
+      "highConfidenceNucleotideHits": 2
     }
   },
   {
