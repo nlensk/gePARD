@@ -285,7 +285,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("genomeAccession")
             .textContent = "";
         
-        document.title = "Genome not found | PARD";
+        document.title = "Genome not found | gePARD";
 
         document.getElementById("genomeContent")
             .innerHTML = `
@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         .textContent = genome.accession;
 
     document.title =
-        `${genome.name} (${genome.accession}) | PARD`;
+        `${genome.name} (${genome.accession}) | gePARD`;
 
     renderGenomePage(genome);
 

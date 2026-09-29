@@ -500,14 +500,14 @@ function updateBrowseTitle() {
     if (searchQuery === "") {
 
         document.title =
-            "Browse Genomes | PARD";
+            "Browse Genomes | gePARD";
 
         return;
 
     }
 
     document.title =
-        `Search: ${searchQuery} | PARD`;
+        `Search: ${searchQuery} | gePARD`;
 
 }
 

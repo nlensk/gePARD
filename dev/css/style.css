@@ -911,3 +911,133 @@ margin-top:20px;
     }
 
 }
+
+/* =========================
+   ABOUT PAGE
+   ========================= */
+
+.about-page {
+    width: min(1000px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 55px 0 20px;
+}
+
+.about-intro {
+    margin-bottom: 45px;
+}
+
+.about-intro h1 {
+    margin: 0 0 20px;
+
+    color: #083358;
+
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+}
+
+.about-lead {
+    max-width: 780px;
+
+    color: #5b6872;
+
+    font-size: 1.2rem;
+    line-height: 1.7;
+}
+
+.about-section {
+    margin-bottom: 35px;
+    padding: 30px;
+
+    background: white;
+
+    border: 1px solid #dce4e9;
+    border-radius: 14px;
+
+    box-shadow: 0 4px 16px rgba(24, 46, 61, 0.06);
+}
+
+.about-section h2 {
+    margin: 0 0 18px;
+
+    color: #083358;
+
+    font-size: 1.7rem;
+}
+
+.about-section p {
+    margin-bottom: 16px;
+
+    color: #4f5d66;
+
+    line-height: 1.7;
+}
+
+.about-section p:last-child {
+    margin-bottom: 0;
+}
+
+.about-section a {
+    color: #0b4f82;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.about-section a:hover {
+    text-decoration: underline;
+}
+
+.about-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.about-card {
+    padding: 25px;
+
+    background: #f5f7fa;
+
+    border: 1px solid #dce4e9;
+    border-radius: 10px;
+}
+
+.about-card h3 {
+    margin: 0 0 12px;
+
+    color: #0b4f82;
+
+    font-size: 1.5rem;
+}
+
+.about-card p {
+    margin: 0;
+
+    font-size: 0.95rem;
+}
+
+.about-contact {
+    margin-bottom: 0;
+}
+
+@media (max-width: 700px) {
+
+    .about-page {
+        width: min(100% - 30px, 1000px);
+
+        padding-top: 35px;
+    }
+
+    .about-section {
+        padding: 24px;
+    }
+
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
